@@ -1,0 +1,39 @@
+version: "2"
+
+services:
+  db_cyber:
+      image: postgres:9.6
+      restart: always
+      environment:
+            POSTGRES_PASSWORD: s3curecyber
+      ports:
+        - "5432:5432"
+      networks:
+        - opentrace_demo
+
+  db_auth:
+      image: postgres:9.6
+      restart: always
+      environment:
+            POSTGRES_PASSWORD: s3cureauth
+      ports:
+        - "5433:5432"
+      networks:
+        - opentrace_demo
+      volumes:
+        - './auth/database/schema.sql:/docker-entrypoint-initdb.d/schema.sql'
+        - './auth/database/seed.sql:/docker-entrypoint-initdb.d/seed.sql'
+
+  db_billing:
+      image: postgres:9.6
+      restart: always
+      environment:
+            POSTGRES_PASSWORD: s3curebilling
+      ports:
+        - "5434:5432"
+      networks:
+        - opentrace_demo
+
+networks:
+  opentrace_demo:
+          driver: bridge
