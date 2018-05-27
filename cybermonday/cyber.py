@@ -27,7 +27,7 @@ tracer = FlaskTracer(opentracing_tracer)
 @app.route('/', methods=['GET'])
 @tracer.trace()
 def index():
-    return 'this is index'
+    return 'this is a index'
 
 @app.route('/login', methods=['POST', 'GET'])
 @tracer.trace()

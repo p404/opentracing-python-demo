@@ -1,0 +1,3 @@
+[submodule "jaeger-elasticsearch-compose"]
+	path = jaeger-elasticsearch-compose
+	url = https://github.com/p404/jaeger-elasticsearch-compose.git
