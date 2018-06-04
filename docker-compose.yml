@@ -1,18 +1,15 @@
 version: "2"
 
 services:
-  db_cyber:
-      image: postgres:9.6
-      restart: always
-      environment:
-            POSTGRES_PASSWORD: s3curecyber
+  app_cyber:
+      build: ./cybermonday
       ports:
-        - "5432:5432"
+        - "5000:5000"
       networks:
-        - opentrace_demo
+        - jaeger-elasticsearch-compose_elastic-jaeger
       volumes:
-        - './cybermonday/database/schema.sql:/docker-entrypoint-initdb.d/schema.sql'
-        - './cybermonday/database/seed.sql:/docker-entrypoint-initdb.d/seed.sql'
+        - './cybermonday:/cybermonday'
+      command: ["python", "/cybermonday/cyber.py"]
 
   db_auth:
       image: postgres:9.6
@@ -20,23 +17,26 @@ services:
       environment:
             POSTGRES_PASSWORD: s3cureauth
       ports:
-        - "5433:5432"
+        - "5432:5432"
       networks:
-        - opentrace_demo
+        - jaeger-elasticsearch-compose_elastic-jaeger
       volumes:
         - './auth/database/schema.sql:/docker-entrypoint-initdb.d/schema.sql'
         - './auth/database/seed.sql:/docker-entrypoint-initdb.d/seed.sql'
 
-  db_billing:
-      image: postgres:9.6
-      restart: always
-      environment:
-            POSTGRES_PASSWORD: s3curebilling
+  app_auth:
+      depends_on:
+        - app_cyber
+        - db_auth
+      build: ./auth
       ports:
-        - "5434:5432"
+        - "5001:5001"
       networks:
-        - opentrace_demo
+        - jaeger-elasticsearch-compose_elastic-jaeger
+      volumes:
+        - './auth:/auth'
+      command: ["python", "/auth/auth.py"]
 
 networks:
-  opentrace_demo:
-          driver: bridge
+  jaeger-elasticsearch-compose_elastic-jaeger:
+      external: true

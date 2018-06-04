@@ -17,6 +17,10 @@ config = Config(
             'type': 'const',
             'param': 1,
         },
+        'local_agent': {
+            'reporting_host': "jaeger-agent",
+            'reporting_port': 5775,
+        },
         'logging': True,
     },
     service_name='cybermonday',
@@ -24,10 +28,22 @@ config = Config(
 opentracing_tracer = config.initialize_tracer()
 tracer = FlaskTracer(opentracing_tracer)
 
+def inject_as_headers(tracer, span):
+    text_carrier = {}
+    tracer.inject(span.context, opentracing.Format.TEXT_MAP, text_carrier)
+    return text_carrier
+
+def validate_email(email):
+    email_regex = re.compile(r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+")
+    if email_regex.match(email):
+        return True
+    else:
+        return False
+
 @app.route('/', methods=['GET'])
 @tracer.trace()
 def index():
-    return 'this is a index'
+    return render_template('index.html')
 
 @app.route('/login', methods=['POST', 'GET'])
 @tracer.trace()
@@ -44,26 +60,14 @@ def login():
         child_span.finish()
 
         headers = inject_as_headers(opentracing_tracer, span)
-        r = requests.post('http://127.0.0.1:5001/auth', json={"email": email, "password": password}, headers=headers)
+        r = requests.post('http://app_auth:5001/auth', json={"email": email, "password": password}, headers=headers)
         if r.status_code == 200:
             return redirect(url_for('index'))
         else:
             return 'login error'
 
-def inject_as_headers(tracer, span):
-    text_carrier = {}
-    tracer.inject(span.context, opentracing.Format.TEXT_MAP, text_carrier)
-    return text_carrier
-
-def validate_email(email):
-    email_regex = re.compile(r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+")
-    if email_regex.match(email):
-        return True
-    else:
-        return False
-
 if __name__ == "__main__":
     log_level = logging.DEBUG
     logging.getLogger('').handlers = []
     logging.basicConfig(format='%(asctime)s %(message)s', level=log_level)
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5000, host='0.0.0.0')

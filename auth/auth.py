@@ -12,7 +12,7 @@ from sqlalchemy.orm import sessionmaker
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:s3cureauth@localhost:5433/auth'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:s3cureauth@db_auth:5432/auth'
 db = SQLAlchemy(app)
 engine = db.engine
 Session = sessionmaker(bind=engine)
@@ -22,6 +22,10 @@ config = Config(
         'sampler': {
             'type': 'const',
             'param': 1,
+        },
+        'local_agent': {
+            'reporting_host': "jaeger-agent",
+            'reporting_port': 5775,
         },
         'logging': True,
     },
@@ -63,5 +67,5 @@ if __name__ == "__main__":
     log_level = logging.DEBUG
     logging.getLogger('').handlers = []
     logging.basicConfig(format='%(asctime)s %(message)s', level=log_level)
-    app.run(debug=True, port=5001)
+    app.run(debug=True, port=5001, host='0.0.0.0')
     opentracing_tracer.close()
