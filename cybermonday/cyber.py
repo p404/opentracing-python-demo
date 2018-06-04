@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # pylint: disable=C0103
 
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, flash, session
 import requests
 import opentracing
 import logging
@@ -10,6 +10,7 @@ from jaeger_client import Config
 from flask_opentracing import FlaskTracer
 
 app = Flask(__name__)
+app.secret_key = "super secret key"
 
 config = Config(
     config={
@@ -62,6 +63,7 @@ def login():
         headers = inject_as_headers(opentracing_tracer, span)
         r = requests.post('http://app_auth:5001/auth', json={"email": email, "password": password}, headers=headers)
         if r.status_code == 200:
+            flash("Login successfully")
             return redirect(url_for('index'))
         else:
             return 'login error'

@@ -45,8 +45,9 @@ class Users(db.Model):
 @tracer.trace()
 def login():
     if request.method == 'POST':
+        logging.info("Request headers: {}".format(request.headers))
+
         span = tracer.get_span()
-        
         payload = request.get_json()
         email = payload['email']
         password = payload['password']

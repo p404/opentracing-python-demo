@@ -1,6 +1,136 @@
 {% extends "layout.html" %}
 {% block body %}
-       
-<h1> here awesome deals <h1>
+<div class="container">
+    <br>  <p class="text-center">Awesome Cyberdeals</p>
+    <hr>
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-success">
+        <p class="text-center">{{ message }}</p>
+    </div>
+    {% endfor %}
+    <div class="card">
+    <table class="table table-hover shopping-cart-wrap">
+    <thead class="text-muted">
+    <tr>
+      <th scope="col">Product</th>
+      <th scope="col" width="120">Quantity</th>
+      <th scope="col" width="120">Price</th>
+      <th scope="col" width="200" class="text-right">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+    <figure class="media">
+        <div class="img-wrap"><img src="https://cdn1.medicalnewstoday.com/content/images/headlines/271/271157/bananas.jpg" class="img-thumbnail img-sm"></div>
+        <figcaption class="media-body">
+            <h6 class="title text-truncate">Awesome banana </h6>
+            <dl class="param param-inline small">
+              <dt>Size: </dt>
+              <dd>XL</dd>
+            </dl>
+            <dl class="param param-inline small">
+              <dt>Color: </dt>
+              <dd>Yellow awesome</dd>
+            </dl>
+        </figcaption>
+    </figure> 
+        </td>
+        <td> 
+            <select class="form-control">
+                <option>1</option>
+                <option>2</option>	
+                <option>3</option>	
+                <option>4</option>	
+            </select> 
+        </td>
+        <td> 
+            <div class="price-wrap"> 
+                <var class="price">USD 145</var> 
+                <small class="text-muted">(USD5 each)</small> 
+            </div> <!-- price-wrap .// -->
+        </td>
+        <td class="text-right"> 
+        <a title="" href="{{ url_for('login') }}" class="btn btn-outline-success" data-toggle="tooltip" data-original-title="Save to Wishlist"> <i class="fa fa-shopping-cart"></i></a> 
+        </td>
+    </tr>
+    <tr>
+        <td>
+    <figure class="media">
+        <div class="img-wrap"><img src="http://bootstrap-ecommerce.com/main/images/items/1.jpg" class="img-thumbnail img-sm"></div>
+        <figcaption class="media-body">
+            <h6 class="title text-truncate">Awesome iron </h6>
+            <dl class="param param-inline small">
+              <dt>Size: </dt>
+              <dd>XS</dd>
+            </dl>
+            <dl class="param param-inline small">
+              <dt>Color: </dt>
+              <dd>Awesome blue</dd>
+            </dl>
+        </figcaption>
+    </figure> 
+        </td>
+        <td> 
+            <select class="form-control">
+                <option>1</option>
+                <option>2</option>	
+                <option>3</option>	
+                <option>4</option>	
+            </select> 
+        </td>
+        <td> 
+            <div class="price-wrap"> 
+                <var class="price">USD 35</var> 
+                <small class="text-muted">(USD10 each)</small> 
+            </div> <!-- price-wrap .// -->
+        </td>
+        <td class="text-right"> 
+        <a title="" href="{{ url_for('login') }}" class="btn btn-outline-success" data-toggle="tooltip" data-original-title="Save to Wishlist"> <i class="fa fa-shopping-cart"></i></a> 
+        </td>
+    </tr>
+    <tr>
+        <td>
+    <figure class="media">
+        <div class="img-wrap"><img src="http://bootstrap-ecommerce.com/main/images/items/2.jpg" class="img-thumbnail img-sm"></div>
+        <figcaption class="media-body">
+            <h6 class="title text-truncate">Awesome batidora </h6>
+            <dl class="param param-inline small">
+              <dt>Size: </dt>
+              <dd>XXL</dd>
+            </dl>
+            <dl class="param param-inline small">
+              <dt>Color: </dt>
+              <dd>Awesome grey</dd>
+            </dl>
+        </figcaption>
+    </figure> 
+        </td>
+        <td> 
+            <select class="form-control">
+                <option>1</option>
+                <option>2</option>	
+                <option>3</option>	
+                <option>4</option>	
+            </select> 
+        </td>
+        <td> 
+            <div class="price-wrap"> 
+                <var class="price">USD 45</var> 
+                <small class="text-muted">(USD15 each)</small> 
+            </div> <!-- price-wrap .// -->
+        </td>
+        <td class="text-right"> 
+            <a title="" href="{{ url_for('login') }}" class="btn btn-outline-success" data-toggle="tooltip" data-original-title="Save to Wishlist"> <i class="fa fa-shopping-cart"></i></a> 
+        </td>
+    </tr>
+    </tbody>
+    </table>
+    </div> <!-- card.// -->
+</div> 
+<!--container end.//-->
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/index.css') }}">      
         
 {% endblock %}
